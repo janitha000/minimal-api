@@ -15,17 +15,24 @@ namespace minimal_api.Infrastructure.Persistance
     {
         private readonly ApplicationDbContext _context;
         protected virtual DbSet<TEntity> Entities { get; set; }
+
         public EfCoreRepository(ApplicationDbContext context)
         {
             _context=context;
+            Entities = _context.Set<TEntity>();
         }
+
         public IQueryable<TEntity> Table => throw new NotImplementedException();
 
         public IQueryable<TEntity> TablelNoTracking => throw new NotImplementedException();
 
-        public Task<TEntity> Add(TEntity entity)
+        public async Task<TEntity> Add(TEntity entity)
         {
-            throw new NotImplementedException();
+            if (entity == null) throw new ArgumentException("entity null");
+            Entities.Add(entity);
+            await _context.SaveChangesAsync();
+
+            return entity;
         }
 
         public Task<int> Count(Expression<Func<TEntity, bool>> predicate)
@@ -38,9 +45,13 @@ namespace minimal_api.Infrastructure.Persistance
             throw new NotImplementedException();
         }
 
-        public Task<bool> Delete(object id)
+        public async Task<bool> Delete(object id)
         {
-            throw new NotImplementedException();
+            var entity = await Get(id);
+            Entities.Remove(entity);
+            await _context.SaveChangesAsync();
+
+            return true;
         }
 
         public async Task<TEntity> Get(object id)
@@ -69,7 +80,7 @@ namespace minimal_api.Infrastructure.Persistance
 
         public IEnumerable<TEntity> GetAll()
         {
-            return Entities;
+            return Entities.AsEnumerable();
         }
 
         public Task<IEnumerable<TEntity>> GetMany(Expression<Func<TEntity, bool>> predicate)

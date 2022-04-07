@@ -20,9 +20,10 @@ namespace minimal_api.Infrastructure
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(configurations.GetConnectionString("default"), 
                 assembly => assembly.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)), ServiceLifetime.Singleton);
-
+            services.AddScoped(typeof(IRepository<>), typeof(EfCoreRepository<>));
+            
+            
             services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());
-
             services.AddScoped<ITodoRepository, ToDoRepository>();
 
             return services;
