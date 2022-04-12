@@ -12,9 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Common\Error\" />
     <Folder Include="Common\Mapping\" />
-    <Folder Include="Common\Model\" />
+    <Folder Include="User\" />
     <Folder Include="Weather\" />
   </ItemGroup>
 

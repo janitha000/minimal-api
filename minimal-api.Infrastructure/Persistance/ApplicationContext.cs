@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using minimal_api.Application.Common.Interface;
+using minimal_api.Authorization;
 using minimal_api.Core.Common;
 using minimal_api.Features.ToDoFeature;
 using System;
@@ -18,6 +19,7 @@ namespace minimal_api.Infrastructure.Persistance
         }
 
         public DbSet<ToDo> ToDo { get; set; }
+        public DbSet<User> Users { get; set; }
 
         public Task<int> SaveChangesAsync()
         {
